@@ -20,6 +20,7 @@ public class User {
     private String lastname;
     private String email;
     private String password;
+    private String mobile_no ;
     private String gender ;
     private List<Integer> followers = new ArrayList<>() ;
     private List<Integer> followings = new ArrayList<>() ;
