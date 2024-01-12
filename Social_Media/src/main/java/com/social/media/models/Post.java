@@ -21,21 +21,12 @@ public class Post {
 	private Integer Id ;
 	private String image ;
 	private String video ;
-	public String getVideo() {
-		return video;
-	}
-	public void setVideo(String video) {
-		this.video = video;
-	}
 	private String caption ;
 	@ManyToOne
 	private User user ;
 	private LocalDateTime createdAt ;
-	
 	@OneToMany
 	private List<User> liked = new ArrayList<>() ;
-	
-	
 	public Integer getId() {
 		return Id;
 	}
@@ -47,6 +38,12 @@ public class Post {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+	public String getVideo() {
+		return video;
+	}
+	public void setVideo(String video) {
+		this.video = video;
 	}
 	public String getCaption() {
 		return caption;
@@ -92,6 +89,11 @@ public class Post {
 		return "Post [Id=" + Id + ", image=" + image + ", video=" + video + ", caption=" + caption + ", user=" + user
 				+ ", createdAt=" + createdAt + ", liked=" + liked + "]";
 	}
+	
+	
+	
+	
+	
 	
 	
 	
