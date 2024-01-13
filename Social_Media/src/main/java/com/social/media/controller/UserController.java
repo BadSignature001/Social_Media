@@ -25,13 +25,9 @@ public class UserController {
 	@Autowired
 	UserService userService ;
 	
-	@PostMapping("/regUser")
-	public User createUser(@RequestBody User user) {
-		User savedUser = userService.registerUser(user);
-		return savedUser;
-	}
 	
-	@GetMapping("/users/{userId}")
+	
+	@GetMapping("/api/users/{userId}")
 	public User getUserById(@PathVariable("userId") Integer userId) throws Exception {
 		User getUser = userService.findUserById(userId);
 		return getUser;
@@ -49,10 +45,18 @@ public class UserController {
 		return updatedUser;
 	}
 	
-	@PutMapping("/users/follow/{userId1}/{userId2}")
+	@PutMapping("/api/users/follow/{userId1}/{userId2}")
 	public User followUserHandler(@PathVariable Integer userId1, @PathVariable Integer userId2) throws Exception {
 		User updatedUser = userService.followUser(userId1, userId2);
 		return updatedUser;
+	}
+	
+	@PutMapping("/users/unfollow/{userId1}/{userId2}")
+	public User unfollowUserHandler(@PathVariable Integer userId1 , @PathVariable Integer userId2)throws Exception
+	{
+		User updatedUser = userService.unfollowUser(userId1, userId2) ;
+		
+		return updatedUser ;
 	}
 	
 	@GetMapping("/users/search")

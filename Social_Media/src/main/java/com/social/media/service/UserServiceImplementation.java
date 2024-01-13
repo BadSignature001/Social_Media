@@ -61,6 +61,8 @@ public class UserServiceImplementation implements UserService{
 		userRepository.save(user2) ;
 		return user1;
 	}
+	
+	
 
 	@Override
 	public User updateUser(User user, Integer userId) throws Exception{
@@ -85,6 +87,10 @@ public class UserServiceImplementation implements UserService{
 		{
 			oldUser.setEmail(user.getEmail());
 		}
+		if(user.getGender()!=null)
+		{
+			oldUser.setGender(user.getGender());
+		}
 		if(user.getPassword()!=null)
 		{
 			oldUser.setPassword(user.getPassword());
@@ -99,6 +105,21 @@ public class UserServiceImplementation implements UserService{
 	public List<User> searchUser(String query) {
 		return userRepository.searchUser(query) ;
 		
+	}
+
+	@Override
+	public User unfollowUser(Integer userId1, Integer userId2) throws Exception {
+		
+		User user1 = findUserById(userId1) ;
+		User user2 = findUserById(userId2) ;
+		
+		user1.getFollowings().remove(user2.getId()) ;
+		user2.getFollowers().remove(user1.getId()) ;
+		
+		userRepository.save(user1) ;
+		userRepository.save(user2) ;
+		
+		return user1;
 	}
 
 }
