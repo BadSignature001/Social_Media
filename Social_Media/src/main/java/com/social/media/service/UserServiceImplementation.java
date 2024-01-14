@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.social.media.config.JwtProvider;
 import com.social.media.models.User;
 import com.social.media.repository.UserRepository;
 
@@ -120,6 +121,15 @@ public class UserServiceImplementation implements UserService{
 		userRepository.save(user2) ;
 		
 		return user1;
+	}
+
+	@Override
+	public User userProfile(String jwt) throws Exception {
+		
+		String email = JwtProvider.getEmailFromJwtToken(jwt) ;
+		User user = userRepository.findByEmail(email) ;
+		
+		return user;
 	}
 
 }
