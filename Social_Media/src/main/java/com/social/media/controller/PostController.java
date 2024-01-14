@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.social.media.models.Post;
+import com.social.media.models.User;
 import com.social.media.service.PostService;
 import com.social.media.service.UserService;
 
@@ -22,6 +24,8 @@ public class PostController {
 	
 	@Autowired
 	PostService postService ;
+	@Autowired
+	UserService userService ;
 	
 	@GetMapping("/posts")
 	public ResponseEntity<List<Post>> getAllPosts()
@@ -46,20 +50,22 @@ public class PostController {
 		return new ResponseEntity <List<Post>>(post,HttpStatus.OK) ;
 	}
 	
-	 @DeleteMapping("/posts/delete/{postId}/{userId}")
-	    public ResponseEntity<String> deletePost(@PathVariable Integer postId, @PathVariable Integer userId) {
+	 @DeleteMapping("/posts/delete/{postId}")
+	    public ResponseEntity<String> deletePost(@PathVariable Integer postId, @RequestHeader("Authorization")String jwt) {
 	        try {
-	            String result = postService.deletePost(postId, userId);
+	        	User userId = userService.userProfile(jwt) ;
+	            String result = postService.deletePost(postId, userId.getId());
 	            return new ResponseEntity<>(result, HttpStatus.OK);
 	        } catch (Exception e) {
 	            // Handle exceptions appropriately, for simplicity, just returning a 400 Bad Request
 	            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 	        }
 	    }
-	 @PostMapping("/posts/create/{userId}")
-	 public ResponseEntity<Post> createPost(@RequestBody Post post, @PathVariable Integer userId) {
+	 @PostMapping("/posts/create")
+	 public ResponseEntity<Post> createPost(@RequestBody Post post, @RequestHeader("Authorization")String jwt) {
 	     try {
-	         Post newPost = postService.createNewPost(post, userId);
+	    	 User userId = userService.userProfile(jwt) ;
+	         Post newPost = postService.createNewPost(post, userId.getId());
 	         return new ResponseEntity<>(newPost, HttpStatus.CREATED);
 	     } catch (Exception e) {
 	         // Handle exceptions appropriately, for simplicity, just returning a 400 Bad Request
@@ -67,18 +73,20 @@ public class PostController {
 	     }
 	 }
 	 
-	 @PutMapping("/posts/save/{userId}/{postId}")
-	 public ResponseEntity<Post> savedPost(@PathVariable Integer postId , @PathVariable Integer userId) throws Exception
+	 @PutMapping("/posts/save/{postId}")
+	 public ResponseEntity<Post> savedPost(@PathVariable Integer postId , @RequestHeader("Authorization")String jwt) throws Exception
 	 {
-		 Post savedPost = postService.savedPost(postId, userId) ;
+		 User userId = userService.userProfile(jwt) ;
+		 Post savedPost = postService.savedPost(postId, userId.getId()) ;
 		 return new ResponseEntity<>(savedPost, HttpStatus.OK);
 	 }
 	 
-	 @PutMapping("/posts/like/{userId}/{postId}")
-	 public ResponseEntity<Post> likedPost(@PathVariable Integer postId , @PathVariable Integer userId) throws Exception
+	 @PutMapping("/posts/like/{postId}")
+	 public ResponseEntity<Post> likedPost(@PathVariable Integer postId , @RequestHeader("Authorization")String jwt) throws Exception
 	 {
 		 try {
-	         Post likePost = postService.likePost(postId, userId);
+			 User userId = userService.userProfile(jwt) ;
+	         Post likePost = postService.likePost(postId, userId.getId());
 	         return new ResponseEntity<>(likePost, HttpStatus.CREATED);
 	     } catch (Exception e) {
 	         // Handle exceptions appropriately, for simplicity, just returning a 400 Bad Request
