@@ -27,6 +27,16 @@ public class Post {
 	private LocalDateTime createdAt ;
 	@OneToMany
 	private List<User> liked = new ArrayList<>() ;
+	
+	@OneToMany
+	private List<Comment> comments = new ArrayList<>() ;
+	
+	public List<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 	public Integer getId() {
 		return Id;
 	}
@@ -69,8 +79,9 @@ public class Post {
 	public void setLiked(List<User> liked) {
 		this.liked = liked;
 	}
+	
 	public Post(Integer id, String image, String video, String caption, User user, LocalDateTime createdAt,
-			List<User> liked) {
+			List<User> liked, List<Comment> comments) {
 		super();
 		Id = id;
 		this.image = image;
@@ -79,6 +90,7 @@ public class Post {
 		this.user = user;
 		this.createdAt = createdAt;
 		this.liked = liked;
+		this.comments = comments;
 	}
 	public Post() {
 		super();
@@ -87,8 +99,10 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [Id=" + Id + ", image=" + image + ", video=" + video + ", caption=" + caption + ", user=" + user
-				+ ", createdAt=" + createdAt + ", liked=" + liked + "]";
+				+ ", createdAt=" + createdAt + ", liked=" + liked + ", comments=" + comments + "]";
 	}
+
+	
 	
 	
 	
